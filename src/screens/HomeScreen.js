@@ -1,36 +1,36 @@
 import React from "react";
 import { View, Button, StyleSheet } from "react-native";
 
-const HomeScreen = () => {
+const HomeScreen = (props) => {
     return (
         <View>
             <View style={styles.layout}>
                 <View style={styles.button}>
-                    <Button title="BMI" />
+                    <Button title="BMI" onPress={function () { props.navigation.navigate("BmiScreen") }} />
                 </View>
                 <View style={styles.button}>
-                    <Button title="Body Fat" />
-                </View>
-            </View>
-            <View style={styles.layout}>
-                <View style={styles.button}>
-                    <Button title="Food Nutrition" />
-                </View>
-                <View style={styles.button}>
-                    <Button title="Water Notification" />
+                    <Button title="Body Fat" onPress={function () { props.navigation.navigate("BodyFatScreen") }} />
                 </View>
             </View>
             <View style={styles.layout}>
                 <View style={styles.button}>
-                    <Button title="Exercise Helper" />
+                    <Button title="Food Nutrition" onPress={function () { props.navigation.navigate("FoodNutritionScreen") }} />
                 </View>
                 <View style={styles.button}>
-                    <Button title="Meal Planner" />
+                    <Button title="Water Notification" onPress={function () { props.navigation.navigate("WaterNotificationScreen") }} />
                 </View>
             </View>
             <View style={styles.layout}>
                 <View style={styles.button}>
-                    <Button title="Goal Set & Check" />
+                    <Button title="Exercise Helper" onPress={function () { props.navigation.navigate("ExerciseHelperScreen") }} />
+                </View>
+                <View style={styles.button}>
+                    <Button title="Meal Planner" onPress={function () { props.navigation.navigate("MealPlannerScreen") }} />
+                </View>
+            </View>
+            <View style={styles.layout}>
+                <View style={styles.button}>
+                    <Button title="Goal Set & Check" onPress={function () { props.navigation.navigate("GoalSetCheckScreen") }} />
                 </View>
             </View>
         </View >
@@ -38,10 +38,10 @@ const HomeScreen = () => {
 }
 
 const styles = StyleSheet.create({
-    layout:{ 
-        flex: 1, 
-        flexDirection: "row", 
-        justifyContent: "center" 
+    layout: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "center"
     },
     button: {
         flex: 0.5,
