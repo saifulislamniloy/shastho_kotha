@@ -39,12 +39,9 @@ const HomeScreen = (props) => {
 
 const styles = StyleSheet.create({
     layout: {
-        flex: 1,
-        flexDirection: "row",
         justifyContent: "center"
     },
     button: {
-        flex: 0.5,
         margin: 10,
         padding: 10
     }
