@@ -1,12 +1,12 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import { View, Text } from 'react-native';
 
-const WaterNotificationScreen =()=>{
-    return (
-        <View>
-            <Text>WaterNotificationScreen</Text>
-        </View>
-    );
-}
+const WaterNotificationScreen = () => {
+  return (
+    <View>
+      <Text>WaterNotificationScreen</Text>
+    </View>
+  );
+};
 
 export default WaterNotificationScreen;
