@@ -5,6 +5,7 @@ const BodyFatScreen =()=>{
     return (
         <View>
             <Text>BodyFatScreen</Text>
+            <Text>Show body fat</Text>
         </View>
     );
 }
