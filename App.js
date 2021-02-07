@@ -11,11 +11,27 @@ import GoalSetCheckScreen from './src/screens/GoalSetCheckScreen';
 import MealPlannerScreen from './src/screens/MealPlannerScreen';
 import WaterNotificationScreen from './src/screens/WaterNotificationScreen';
 
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper'
+
 
 const HomeStack = createStackNavigator();
 
+const theme = {
+  ...DefaultTheme,
+  roundness: 3,
+  colors: {
+    ...DefaultTheme.colors,
+    //primary: '#4C99CF',
+    //accent: '#41CCC7',
+    //background:'#ECEDEA',
+    //surface:'#FDFDFD',
+    //placeholder:'#DCDCDC'
+  },
+};
+
 function App() {
   return (
+  <PaperProvider theme={theme}>
     <NavigationContainer>
       <HomeStack.Navigator initialRouteName="HomeScreen">
         <HomeStack.Screen name="HomeScreen" component={HomeScreen} />
@@ -28,6 +44,7 @@ function App() {
         <HomeStack.Screen name="WaterNotificationScreen" component={WaterNotificationScreen} />
       </HomeStack.Navigator>
     </NavigationContainer>
+  </PaperProvider>
   );
 }
 

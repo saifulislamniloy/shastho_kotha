@@ -1,1 +1,7 @@
+npm install @react-navigation/native @react-navigation/stack
 expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view
+npm install @react-native-community/picker --save
+npm install react-native-elements
+npm install react-native-device --save
+npm install react-native-vector-icons
+npm install react-native-paper
