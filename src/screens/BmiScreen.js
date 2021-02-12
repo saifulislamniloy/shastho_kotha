@@ -1,12 +1,18 @@
 import React from 'react';
 import { useState, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { Card } from 'react-native-elements';
-import { RadioButton, TextInput, Divider } from 'react-native-paper';
+import { RadioButton, TextInput, Divider, HelperText, Button } from 'react-native-paper';
 
 const BmiScreen =()=>{
     const input = React.createRef();
-    const [checked, setChecked] = useState('male'); 
+    const window = Dimensions.get("window");
+    const screen = Dimensions.get("screen");
+    const [dimensions, setDimensions] = useState({ window, screen });
+    const onChange = ({ window, screen }) => {
+        setDimensions({ window, screen });
+      };
+    const [gender, setGender] = useState(0); 
     
     const [height, setHeight] = useState(0);
     const [heightCm, setHeightCm] = useState('');
@@ -21,6 +27,21 @@ const BmiScreen =()=>{
     const [weightUnit, setWeightUnit] = useState('kg');
 
     const [age, setAge] = useState('');
+
+    const[BMI, setBMI] = useState('');
+    const[bodyFat, setBodyFat] = useState('');
+    const[isRenderResult, setIsRenderResult] = useState(false);
+
+    const inputHasErrors = (lower_limit, upper_limit, input) => {
+        return (input<lower_limit || input>upper_limit);
+      };
+
+    useEffect(() => {
+        Dimensions.addEventListener("change", onChange);
+        return () => {
+          Dimensions.removeEventListener("change", onChange);
+        };
+      });
 
     const renderHeightInput=(heightUnit)=>{
         if(heightUnit=='cm'){
@@ -41,8 +62,9 @@ const BmiScreen =()=>{
         }
         else{
             return (
-                <View>
+                <View style={{ flexDirection:"row", justifyContent:"space-between" }}>
                     <TextInput
+                        style={{ width:dimensions.window.width/2.4 }}
                         mode="outlined"
                         label="feet"
                         value={heightFeet}
@@ -59,6 +81,7 @@ const BmiScreen =()=>{
                         }}
                     />
                     <TextInput
+                        style={{ width:dimensions.window.width/2.4 }}
                         mode="outlined"
                         label="inches"
                         value={heightInches}
@@ -98,8 +121,9 @@ const BmiScreen =()=>{
         }
         else{
             return (
-                <View>
+                <View style={{ flexDirection:"row", justifyContent:"space-between" }}>
                     <TextInput
+                        style={{ width:dimensions.window.width/2.4 }}
                         mode="outlined"
                         label="stone"
                         value={weightStone}
@@ -116,6 +140,7 @@ const BmiScreen =()=>{
                         }}
                     />
                     <TextInput
+                        style={{ width:dimensions.window.width/2.4 }}
                         mode="outlined"
                         label="pounds"
                         value={weightPounds}
@@ -141,9 +166,11 @@ const BmiScreen =()=>{
             return(
                 <View>
                     <Divider/>
-                    <View style={{flexDirection:'row', alignItems:'center', paddingTop:10}}>
-                        <Text style={{fontWeight:'bold'}}>Age </Text>
+                    <Text style={{fontWeight:'bold'}}>Age </Text>
+                    <View style={{flexDirection:'row', alignItems:'center', paddingTop:10}}>   
                         <TextInput
+                            style={{ width:dimensions.window.width/2.4 }}
+                            label="age: 2 - 120 years"
                             mode="outlined"
                             value={age}
                             onChangeText={(age) => {   
@@ -151,7 +178,27 @@ const BmiScreen =()=>{
                                 setAge(input);
                             }}
                         />
+                        <HelperText type="error" visible={inputHasErrors(2, 120, parseInt(age))}>
+                            invalid age !!
+                        </HelperText>
                     </View>
+                </View>
+            );
+        }
+    }
+
+    const renderResult=()=>{
+        if(isRenderResult){
+            return(
+                <View>
+                    <Card>
+                        <Card.Title>BMI result</Card.Title> 
+                        <Text>BMI: {BMI}</Text>
+                    </Card>
+                    <Card>
+                        <Card.Title>Body fat percentage result</Card.Title> 
+                        <Text>Body Fat: {bodyFat}%</Text>
+                    </Card>
                 </View>
             );
         }
@@ -173,19 +220,19 @@ const BmiScreen =()=>{
                 >
                     <View  style={{flexDirection:'row', alignItems:"center"}}>
                         <RadioButton
-                            value="male"
-                            status={ checked === 'male' ? 'checked' : 'unchecked' }
-                            onPress={() => {setChecked('male');  }}
+                            value="female"
+                            status={ gender === 0 ? 'checked' : 'unchecked' }
+                            onPress={() => {setGender(0); /* 0->female */ }}
                         />
-                        <Text>Male</Text>
+                        <Text>Female</Text>
                     </View>
                     <View style={{flexDirection:'row', alignItems:"center"}}>
                         <RadioButton
-                            value="female"
-                            status={ checked === 'female' ? 'checked' : 'unchecked' }
-                            onPress={() => {setChecked('female'); }}
+                            value="male"
+                            status={ gender === 1 ? 'checked' : 'unchecked' }
+                            onPress={() => {setGender(1); /* 1-> male */ }}
                         />
-                        <Text>Female</Text>
+                        <Text>Male</Text>
                     </View>
                 </View>
 
@@ -201,7 +248,7 @@ const BmiScreen =()=>{
            
                     <TouchableOpacity
                         onPress={()=>{
-                            alert(height);
+                            //alert(height);
                             setHeight(0);
                             setHeightCm('');
                             setHeightInches('');
@@ -231,7 +278,7 @@ const BmiScreen =()=>{
            
                     <TouchableOpacity
                         onPress={()=>{
-                            alert(weight);
+                            //alert(weight);
                             setWeight(0);
                             setWeightKg('');
                             setWeightPounds('');
@@ -253,7 +300,43 @@ const BmiScreen =()=>{
                     {renderAgeInput()}
                 </View>
                 
+                <Button 
+                    //icon="calulate" 
+                    mode="contained" 
+                    onPress={() => {
+                        if(weight<2 ){
+                            alert("Weight is too low. Weight should be minimum 2kg");
+                            setIsRenderResult(false);
+                        }
+                        else if(height<0.3048){
+                            alert("Height is too low. Minimum height required 12inches or 300cm");
+                            setIsRenderResult(false);
+                        }
+                        else if(age<2 && age>120){
+                            alert("Invalid age !!");
+                            setIsRenderResult(false);
+                        }
+                        else{
+                            var bmi=weight/(height**2);
+                            setBMI(bmi);
+                            if(age<=15 && age>=2)
+                                setBodyFat((1.51*bmi) - (0.70*age) - (3.6*gender) + 1.4 );
+                            else if(age>15 && age<=120){
+                                setBodyFat((1.39*bmi) + (0.16*age) - (10.34*gender)- 9 );
+                                alert(gender);
+                            }
+                            setIsRenderResult(true);
+                        }
+                            
+                    }}
+                >
+                    Calculate
+                </Button>
             </Card>
+
+            <View style={{paddingBottom:15}}>
+                {renderResult()}
+            </View>
             
         </ScrollView>
     );
