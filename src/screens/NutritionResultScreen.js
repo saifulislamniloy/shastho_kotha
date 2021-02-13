@@ -4,11 +4,11 @@ import { Dimensions, View } from "react-native";
 import { ProgressChart } from 'react-native-chart-kit';
 const screenWidth = Dimensions.get("window").width;
 const chartConfig = {
-  backgroundGradientFrom: "#1E2923",
+  backgroundGradientFrom: "#FFFFFF",
   backgroundGradientFromOpacity: 0,
-  backgroundGradientTo: "#08130D",
+  backgroundGradientTo: "#FFFFFF",
   backgroundGradientToOpacity: 0.5,
-  color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
   strokeWidth: 2, // optional, default 3
   barPercentage: 0.5,
   useShadowColorFromDataset: false // optional
@@ -18,12 +18,15 @@ const chartConfig = {
 const NutritionResultScreen = (props) => {
   let nutrition = props.route.params;
   let carbohydratesCalories = (parseInt(nutrition.Carbohydrate) / 1000) * 4;
-  let proteinCalories = (parseInt(nutrition.Carbohydrate) / 1000) * 4;
-  let fatCalories = (parseInt(nutrition.Carbohydrate) / 1000) * 9;
+  let proteinCalories = (parseInt(nutrition.Protein) / 1000) * 4;
+  let fatCalories = (parseInt(nutrition.Fat) / 1000) * 9;
   let totalCalorie = carbohydratesCalories + proteinCalories + fatCalories
+  let carbatio = carbohydratesCalories / totalCalorie;
+  let proteinRatio = proteinCalories / totalCalorie;
+  let fatRatio = fatCalories / totalCalorie;
     const data = {
-      labels: ["Carbohydrate", "Protein", "Fat"], // optional
-      data: [carbohydratesCalories, proteinCalories, fatCalories]
+      labels: ["Carb", "Protein", "Fat"], // optional
+      data: [carbatio, proteinRatio, fatRatio]
     };
   return (
     <Container>
@@ -50,7 +53,7 @@ const NutritionResultScreen = (props) => {
             </Body>
           </CardItem>
         </Card>
-        <View style={{marginRight:5}}>
+        <View style={{border:'1px solid red', margin:1}}>
           <ProgressChart
             data={data}
             width={screenWidth-5}
