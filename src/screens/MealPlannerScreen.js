@@ -1,18 +1,17 @@
 import { AntDesign } from '@expo/vector-icons';
-import { Button, Container, Content, Form, List, Picker, Text } from 'native-base';
+import { Button, Container, Content, Form, List, Picker, Spinner, Text } from 'native-base';
 import React, { Component } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
+import { getFoods, getFoodsArray } from '../db/FirebaseDb';
 
 export default class MealPlannerScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: 'Select Food',
-      foods: [
-        { title: 'mango', amount: 100 },
-        { title: 'rice', amount: 100 }
-      ],
-      selectedFoods: []
+      selected: '',
+      foods: [],
+      selectedFoods: [],
+      loading: true
     };
   }
 
@@ -28,7 +27,7 @@ export default class MealPlannerScreen extends Component {
     emptyFoodView: {
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     selectedFoodContainer: {
       display: 'flex',
@@ -69,16 +68,27 @@ export default class MealPlannerScreen extends Component {
     }
   });
 
-  onValueChange(value: string) {
-    this.setState({
-      selected: value
+  componentDidMount() {
+    console.log(this.props.navigation.navigate);
+    getFoods().then((snapshot) => {
+      const foods = snapshot.val();
+      const foodArray = getFoodsArray(foods);
+      this.setState({ foods: foodArray, loading: false });
+      // console.log(foodArray);
     });
-    this.addFood(this.state.selected);
   }
 
-  addFood(food) {
+  onValueChange(value) {
+    this.setState({ selected: value });
+    this.addFood(value);
+  }
+
+  addFood(i) {
     let selectedFoods = this.state.selectedFoods;
-    selectedFoods.push({ title: food, amount: 100 });
+    let food = this.state.foods[i];
+    food.amount = 100;
+    selectedFoods.push(food);
+    console.log(food);
     this.setState({ selectedFoods: selectedFoods });
   }
 
@@ -103,7 +113,24 @@ export default class MealPlannerScreen extends Component {
     this.setState({ selectedFoods: selectedFoods });
   }
 
+  calculateNutrition() {
+    let Carbohydrate = 0;
+    let Protein = 0;
+    let Fat = 0;
+    let Iron = 0;
+    let selectedFoods = this.state.selectedFoods;
+    selectedFoods.map((food) => {
+      Carbohydrate += +(parseFloat(food.Carbohydrate).toFixed(0) * food.amount) / 100;
+      Protein += +(parseFloat(food.Protein).toFixed(0) * food.amount) / 100;
+      Fat += +(parseFloat(food.Fat).toFixed(0) * food.amount) / 100;
+      Iron += +parseFloat(food.Iron).toFixed(10);
+    });
+    console.log(Carbohydrate, Protein, Fat, Iron);
+    return { Carbohydrate, Protein, Fat };
+  }
+
   render() {
+    if (this.state.loading) return <Spinner />;
     return (
       <Container>
         <Content>
@@ -112,10 +139,13 @@ export default class MealPlannerScreen extends Component {
               note
               mode='dropdown'
               style={{ width: null }}
+              placeholder='Select Food'
+              placeholderStyle={{ color: '#bfc6ea' }}
+              placeholderIconColor='#007aff'
               selectedValue={this.state.selected}
               onValueChange={this.onValueChange.bind(this)}>
               {this.state.foods.map((food, index) => {
-                return <Picker.Item label={food.title} value={`key${index}`} />;
+                return <Picker.Item key={index} label={food.TitleBangla} value={index} />;
               })}
             </Picker>
           </Form>
@@ -131,7 +161,7 @@ export default class MealPlannerScreen extends Component {
                 return (
                   <View key={index} style={this.styles.selectedFoodContainer}>
                     <View style={this.styles.topView}>
-                      <Text style={this.styles.title}>{food.title}</Text>
+                      <Text style={this.styles.title}>{food.TitleBangla}</Text>
                       <Button bordered danger onPress={() => this.removeFood(index)} style={this.styles.remove}>
                         <AntDesign name='delete' size={24} color='red' />
                       </Button>
@@ -149,7 +179,11 @@ export default class MealPlannerScreen extends Component {
                 );
               })}
             <View style={this.styles.calculateButton}>
-              <Button rounded onPress={() => this.addFood('h')}>
+              <Button
+                rounded
+                onPress={() => {
+                  this.props.navigation.navigate('NutritionResultScreen', this.calculateNutrition());
+                }}>
                 <Text>Calculate Nutrition</Text>
               </Button>
             </View>
