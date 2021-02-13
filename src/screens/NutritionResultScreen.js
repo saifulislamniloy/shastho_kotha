@@ -1,10 +1,30 @@
 import { Body, Card, CardItem, Container, Content, Text } from 'native-base';
 import React from 'react';
+import { Dimensions, View } from "react-native";
+import { ProgressChart } from 'react-native-chart-kit';
+const screenWidth = Dimensions.get("window").width;
+const chartConfig = {
+  backgroundGradientFrom: "#1E2923",
+  backgroundGradientFromOpacity: 0,
+  backgroundGradientTo: "#08130D",
+  backgroundGradientToOpacity: 0.5,
+  color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+  strokeWidth: 2, // optional, default 3
+  barPercentage: 0.5,
+  useShadowColorFromDataset: false // optional
+};
+
 
 const NutritionResultScreen = (props) => {
   let nutrition = props.route.params;
-  let totalCalorie =
-    (parseInt(nutrition.Carbohydrate) / 1000) * 4 + (parseInt(nutrition.Protein) / 1000) * 4 + (parseInt(nutrition.Fat) / 1000) * 9;
+  let carbohydratesCalories = (parseInt(nutrition.Carbohydrate) / 1000) * 4;
+  let proteinCalories = (parseInt(nutrition.Carbohydrate) / 1000) * 4;
+  let fatCalories = (parseInt(nutrition.Carbohydrate) / 1000) * 9;
+  let totalCalorie = carbohydratesCalories + proteinCalories + fatCalories
+    const data = {
+      labels: ["Carbohydrate", "Protein", "Fat"], // optional
+      data: [carbohydratesCalories, proteinCalories, fatCalories]
+    };
   return (
     <Container>
       <Content>
@@ -30,6 +50,17 @@ const NutritionResultScreen = (props) => {
             </Body>
           </CardItem>
         </Card>
+        <View style={{marginRight:5}}>
+          <ProgressChart
+            data={data}
+            width={screenWidth-5}
+            height={220}
+            strokeWidth={12}
+            radius={20}
+            chartConfig={chartConfig}
+            hideLegend={false}
+          />
+        </View>
       </Content>
     </Container>
   );
