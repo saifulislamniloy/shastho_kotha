@@ -28,10 +28,7 @@ const FoodNutritionScreen = (props) => {
                 props.navigation.navigate('FoodDetail', food);
               }}>
               <CardItem cardBody>
-                <Image
-                  source={{ uri: food.Image }}
-                  style={{ height: 200, width: null, flex: 1 }}
-                />
+                <Image source={{ uri: food.Image }} style={{ height: 200, width: null, flex: 1 }} />
               </CardItem>
               <CardItem>
                 <Body>
