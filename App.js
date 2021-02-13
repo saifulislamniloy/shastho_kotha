@@ -10,6 +10,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import MealPlannerScreen from './src/screens/MealPlannerScreen';
 import NutritionResultScreen from './src/screens/NutritionResultScreen';
 import FoodDetail from './src/screens/FoodDetail';
+import ExerciseDetail from './src/screens/ExerciseDetail';
 import WaterNotificationScreen from './src/screens/WaterNotificationScreen';
 
 
@@ -28,6 +29,7 @@ function App() {
         <HomeStack.Screen name="GoalSetCheckScreen" component={GoalSetCheckScreen} />
         <HomeStack.Screen name="MealPlannerScreen" component={MealPlannerScreen} />
         <HomeStack.Screen name="FoodDetail" component={FoodDetail} />
+        <HomeStack.Screen name="ExerciseDetail" component={ExerciseDetail} />
         <HomeStack.Screen name="NutritionResultScreen" component={NutritionResultScreen} />
         <HomeStack.Screen name="WaterNotificationScreen" component={WaterNotificationScreen} />
       </HomeStack.Navigator>
