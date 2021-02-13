@@ -170,7 +170,7 @@ const BmiScreen =()=>{
                     <View style={{flexDirection:'row', alignItems:'center', paddingTop:10}}>   
                         <TextInput
                             style={{ width:dimensions.window.width/2.4 }}
-                            label="age: 2 - 120 years"
+                            label="age: 2 - 120"
                             mode="outlined"
                             value={age}
                             onChangeText={(age) => {   
