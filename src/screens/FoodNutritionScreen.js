@@ -27,10 +27,12 @@ const FoodNutritionScreen = (props) => {
                 console.log('pressed');
                 props.navigation.navigate('FoodDetail', food);
               }}>
-              
-            <CardItem cardBody>
-              <Image source={{uri: 'https://cdn.pixabay.com/photo/2012/04/26/18/41/banana-42793_960_720.png'}} style={{height: 200, width: null, flex: 1}}/>
-            </CardItem>
+              <CardItem cardBody>
+                <Image
+                  source={{ uri: food.Image }}
+                  style={{ height: 200, width: null, flex: 1 }}
+                />
+              </CardItem>
               <CardItem>
                 <Body>
                   <Text style={styles.foodTitle}>{food.TitleBangla}</Text>
