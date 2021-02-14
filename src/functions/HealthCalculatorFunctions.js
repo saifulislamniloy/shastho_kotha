@@ -97,5 +97,15 @@ const DailyWaterNeed=(age, weight)=>{
     return (res/28.3);
 }
 
+const calculateBMR=(weight, height, age, gender)=>{
+    let bmr = 0;
+    if(gender==0 || gender=='female'){
+        bmr = (10*weight) + (625*height) - (5*age) - 161; //Mifflin-St Jeor Equation
+    }
+    else if(gender==1 || gender=='male'){
+        bmr = (10*weight) + (625*height) - (5*age) + 5;
+    }
+    return bmr;
+}
 
-export {BMICategory, bodyFatCategory,DailyWaterNeed};
+export {BMICategory, bodyFatCategory,DailyWaterNeed, calculateBMR};
