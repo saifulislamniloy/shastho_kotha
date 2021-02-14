@@ -6,4 +6,5 @@ npm install react-native-device --save
 npm install react-native-vector-icons
 npm install react-native-paper
 expo install react-native-modal-datetime-picker @react-native-community/datetimepicker
+npm i react-native-modal-picker --save
 npm install @react-native-async-storage/async-storage
