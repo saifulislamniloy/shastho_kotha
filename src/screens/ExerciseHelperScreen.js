@@ -1,6 +1,6 @@
 import { Body, CardItem, Container, Content, Spinner, Text } from 'native-base';
 import React, { Component } from 'react';
-import { Image, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { getExerciseNames } from './../db/FileDbFunctions';
 export default class ExerciseHelperScreen extends Component {
   constructor(props) {
@@ -10,6 +10,20 @@ export default class ExerciseHelperScreen extends Component {
       loading: true
     };
   }
+
+  styles = StyleSheet.create({
+    card: {
+      borderRadius: 5,
+      borderWidth: 2,
+      borderColor: 'green',
+      margin: 3
+    },
+    title: {
+      alignSelf: 'center',
+      fontSize: 25
+    }
+  });
+
   componentDidMount() {
     this.setState({ exercises: getExerciseNames(), loading: false });
   }
@@ -21,7 +35,7 @@ export default class ExerciseHelperScreen extends Component {
           {this.state.exercises.map((exercise, index) => {
             return (
               <TouchableOpacity
-                // style={styles.food}
+                style={this.styles.card}
                 onPress={() => {
                   console.log('pressed');
                   this.props.navigation.navigate('ExerciseDetail', exercise);
@@ -31,7 +45,7 @@ export default class ExerciseHelperScreen extends Component {
                 </CardItem>
                 <CardItem>
                   <Body>
-                    <Text>{exercise.name}</Text>
+                    <Text style={this.styles.title}>{exercise.name}</Text>
                   </Body>
                 </CardItem>
               </TouchableOpacity>
